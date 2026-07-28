@@ -45,6 +45,70 @@ const MAPA_ESTADIO = {
 // Cantidad máxima de entradas por sección que se puede agregar en una misma compra (provisorio).
 const MAX_POR_COMPRA_SECCION = 6;
 
+// ----------------------------------------------------------------------------
+// Mapa visual del estadio (SVG generado por código, no una imagen fija).
+// Cada "gajo" (wedge) ocupa un rango de grados (0° = arriba, sentido horario)
+// alrededor de la cancha y apunta a una zona de MAPA_ESTADIO. El de "zona: null"
+// es un sector todavía sin definir — queda de ejemplo de cómo sumar más
+// gajos el día que tengamos el plano real (con más anillos, gates, etc).
+// ----------------------------------------------------------------------------
+const MAPA_VISUAL = {
+  cx: 200, cy: 190, radioInterno: 68, radioExterno: 150,
+  wedges: [
+    { zona: "platea-norte", desde: -55, hasta: 55, color: "#eaf6fd", colorActiva: "#bfe6fb" },
+    { zona: "populares", desde: 55, hasta: 130, color: "#fde3c4", colorActiva: "#fbcf94" },
+    { zona: "platea-sur", desde: 130, hasta: 230, color: "#eaf6fd", colorActiva: "#bfe6fb" },
+    { zona: null, nombre: "Sector a definir", desde: 230, hasta: 305, color: "#e7ebf0", colorActiva: "#e7ebf0" },
+  ],
+};
+
+function puntoPolar(cx, cy, r, anguloDeg) {
+  const rad = (anguloDeg * Math.PI) / 180;
+  return { x: cx + r * Math.sin(rad), y: cy - r * Math.cos(rad) };
+}
+
+function annularSectorPath(cx, cy, rInt, rExt, a0, a1) {
+  const p1 = puntoPolar(cx, cy, rExt, a0);
+  const p2 = puntoPolar(cx, cy, rExt, a1);
+  const p3 = puntoPolar(cx, cy, rInt, a1);
+  const p4 = puntoPolar(cx, cy, rInt, a0);
+  const largeArc = a1 - a0 > 180 ? 1 : 0;
+  return `M ${p1.x} ${p1.y} A ${rExt} ${rExt} 0 ${largeArc} 1 ${p2.x} ${p2.y} L ${p3.x} ${p3.y} A ${rInt} ${rInt} 0 ${largeArc} 0 ${p4.x} ${p4.y} Z`;
+}
+
+function renderMapaEstadio(p) {
+  const { cx, cy, radioInterno, radioExterno, wedges } = MAPA_VISUAL;
+  const radioMedio = (radioInterno + radioExterno) / 2;
+
+  const gajos = wedges.map(w => {
+    const activa = w.zona && w.zona === zonaActiva;
+    const path = annularSectorPath(cx, cy, radioInterno, radioExterno, w.desde, w.hasta);
+    const medio = (w.desde + w.hasta) / 2;
+    const label = puntoPolar(cx, cy, radioMedio, medio);
+    const nombre = w.zona ? obtenerZona(w.zona).nombre : w.nombre;
+    const precio = w.zona ? formatoARS(p.precios[w.zona]) : "";
+    return `
+      <g>
+        <path class="mapa-wedge ${activa ? "activa" : ""} ${w.zona ? "" : "placeholder"}"
+          d="${path}" fill="${activa ? w.colorActiva : w.color}" data-zona="${w.zona || ""}">
+          <title>${nombre}${precio ? " — " + precio : " (a definir)"}</title>
+        </path>
+        <text x="${label.x}" y="${label.y}" class="mapa-wedge-label" text-anchor="middle">${nombre}</text>
+        ${precio ? `<text x="${label.x}" y="${label.y + 14}" class="mapa-wedge-precio" text-anchor="middle">${precio}</text>` : ""}
+      </g>
+    `;
+  }).join("");
+
+  return `
+    <svg viewBox="0 0 400 370" class="mapa-estadio-svg" role="img" aria-label="Mapa del estadio, tocá una zona para ver las entradas">
+      ${gajos}
+      <rect x="160" y="160" width="80" height="60" rx="10" fill="#e7c9a3" stroke="#a9784f" stroke-width="2"></rect>
+      <circle cx="200" cy="190" r="14" fill="none" stroke="#a9784f" stroke-width="2"></circle>
+      <line x1="200" y1="160" x2="200" y2="220" stroke="#a9784f" stroke-width="2"></line>
+    </svg>
+  `;
+}
+
 // Precio por zona y disponibilidad por sección, particular de cada partido.
 const PARTIDOS = [
   {
@@ -128,6 +192,8 @@ function renderSectores() {
   const p = partidoSeleccionado;
   $panel.innerHTML = `
     <h2 class="section-title">${p.rival} — elegí tu ubicación</h2>
+    <div class="mapa-estadio-wrap">${renderMapaEstadio(p)}</div>
+    <div class="zona-nota">Mapa ilustrativo y provisorio — se reemplazará por el plano real del estadio. Tocá una zona para ver sus secciones.</div>
     <div class="zona-tabs">
       ${MAPA_ESTADIO.zonas.map(z => `
         <button class="zona-tab ${z.id === zonaActiva ? "activa" : ""}" data-zona="${z.id}">
@@ -136,10 +202,17 @@ function renderSectores() {
         </button>
       `).join("")}
     </div>
-    <div class="zona-nota">Distribución de sectores provisoria — se actualizará cuando tengamos el mapa real del estadio.</div>
     <div class="secciones-grid" id="secciones-grid"></div>
     <div id="seccion-detalle"></div>
   `;
+
+  $panel.querySelectorAll(".mapa-wedge:not(.placeholder)").forEach(path => {
+    path.addEventListener("click", () => {
+      zonaActiva = path.dataset.zona;
+      seccionActiva = null;
+      renderSectores();
+    });
+  });
 
   $panel.querySelectorAll("button[data-zona]").forEach(btn => {
     btn.addEventListener("click", () => {

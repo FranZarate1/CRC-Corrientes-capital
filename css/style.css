@@ -312,6 +312,40 @@ footer.site-footer .social {
 .partido-info .meta { color: var(--gris); font-size: 13px; margin-top: 5px; }
 .partido-precio { font-weight: 700; color: var(--azul); font-size: 15px; }
 
+/* Mapa interactivo del estadio (SVG) */
+.mapa-estadio-wrap {
+  margin-top: 18px;
+  display: flex;
+  justify-content: center;
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: var(--radio);
+  padding: 16px;
+  box-shadow: var(--sombra);
+}
+.mapa-estadio-svg { width: 100%; max-width: 380px; height: auto; }
+.mapa-wedge {
+  stroke: var(--blanco);
+  stroke-width: 2;
+  cursor: pointer;
+  transition: filter .15s ease, stroke .15s ease, stroke-width .15s ease;
+}
+.mapa-wedge:hover { filter: brightness(1.06); }
+.mapa-wedge.activa { stroke: var(--marino); stroke-width: 3; }
+.mapa-wedge.placeholder { cursor: not-allowed; }
+.mapa-wedge-label {
+  font-size: 11px;
+  font-weight: 700;
+  fill: var(--marino);
+  pointer-events: none;
+}
+.mapa-wedge-precio {
+  font-size: 10px;
+  font-weight: 600;
+  fill: var(--azul);
+  pointer-events: none;
+}
+
 /* Zonas del estadio (tabs) */
 .zona-tabs {
   display: flex;
