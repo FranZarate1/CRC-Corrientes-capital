@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="es-AR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Comprar Entradas LNB — Club de Regatas Corrientes (Prototipo)</title>
+<link rel="stylesheet" href="css/style.css">
+</head>
+<body>
+
+<div class="demo-banner">PROTOTIPO INTERNO — flujo de compra simulado, no se procesan pagos reales</div>
+
+<header class="site-header">
+  <div class="header-top">
+    <a href="index.html" class="logo">
+      <img src="https://crc.org.ar/w/wp-content/uploads/2024/05/LogoCRC.png" alt="Club de Regatas Corrientes">
+      <span>Club de Regatas Corrientes</span>
+    </a>
+  </div>
+  <nav class="main-nav">
+    <ul>
+      <li><a href="index.html">Portada</a></li>
+      <li><a href="index.html#socios">Socios</a></li>
+      <li><a href="index.html#institucional">Institucional</a></li>
+      <li><a href="index.html#deportes">Deportes</a></li>
+      <li><a href="index.html#actividades">Actividades</a></li>
+      <li><a href="index.html#beneficios">Beneficios</a></li>
+      <li><a href="index.html#lnb">LNB</a></li>
+      <li class="destacado"><a href="entradas.html" class="active">🎟 Comprar Entradas</a></li>
+    </ul>
+  </nav>
+</header>
+
+<div class="hero">
+  <div class="container">
+    <h1>Comprar Entradas — Liga Nacional de Básquet</h1>
+    <p>Elegí el partido, el sector y la cantidad de entradas. Este flujo es una simulación con fines de demostración.</p>
+  </div>
+</div>
+
+<section>
+  <div class="container entradas-layout">
+    <div>
+      <h2 class="section-title">Próximos partidos como local</h2>
+      <div class="partido-lista" id="partido-lista">
+        <!-- generado por js/entradas.js -->
+      </div>
+
+      <div id="sectores-panel" style="margin-top:30px;"></div>
+    </div>
+
+    <aside class="carrito-box">
+      <h3>Tu carrito</h3>
+      <ul id="carrito-items"></ul>
+      <p class="carrito-vacio" id="carrito-vacio">Todavía no agregaste entradas.</p>
+      <div class="carrito-total">
+        <span>Total</span>
+        <span id="carrito-total-monto">$0</span>
+      </div>
+      <button class="btn" style="width:100%;margin-top:14px;" id="btn-checkout" disabled>Finalizar compra</button>
+    </aside>
+  </div>
+</section>
+
+<footer class="site-footer">
+  <div class="container">
+    <p>© Club de Regatas Corrientes — Prototipo de demostración interna</p>
+    <div class="social">
+      <span>Facebook</span><span>X</span><span>Instagram</span><span>TikTok</span><span>YouTube</span>
+    </div>
+  </div>
+</footer>
+
+<!-- Modal checkout -->
+<div class="modal-overlay" id="modal-overlay">
+  <div class="modal-box" id="modal-box">
+    <!-- contenido generado por js/entradas.js -->
+  </div>
+</div>
+
+<script src="js/entradas.js"></script>
+</body>
+</html>
