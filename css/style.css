@@ -312,23 +312,85 @@ footer.site-footer .social {
 .partido-info .meta { color: var(--gris); font-size: 13px; margin-top: 5px; }
 .partido-precio { font-weight: 700; color: var(--azul); font-size: 15px; }
 
-.sectores {
+/* Zonas del estadio (tabs) */
+.zona-tabs {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-top: 18px;
+}
+.zona-tab {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 4px;
+  padding: 12px 18px;
+  border: 1.5px solid var(--borde);
+  border-radius: 12px;
+  background: var(--blanco);
+  cursor: pointer;
+  font-weight: 700;
+  color: var(--marino);
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.zona-tab:hover { border-color: var(--celeste); transform: translateY(-2px); }
+.zona-tab.activa { border-color: var(--azul); background: var(--celeste-suave); }
+.zona-tab-precio { font-size: 12.5px; color: var(--azul); font-weight: 700; }
+
+.zona-nota {
+  margin-top: 10px;
+  font-size: 12px;
+  color: var(--gris);
+  font-style: italic;
+}
+
+/* Secciones dentro de una zona */
+.secciones-grid {
   display: grid;
   grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
   gap: 14px;
   margin-top: 18px;
 }
-.sector-card {
-  border: 1px solid var(--borde);
+.seccion-card {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: 6px;
+  border: 1.5px solid var(--borde);
   border-radius: 12px;
   padding: 16px;
   background: var(--blanco);
   box-shadow: var(--sombra);
-  transition: border-color .18s ease;
+  cursor: pointer;
+  text-align: left;
+  transition: border-color .18s ease, background .18s ease;
 }
-.sector-card:hover { border-color: var(--celeste); }
-.sector-card h4 { color: var(--marino); font-size: 14px; margin-bottom: 4px; font-weight: 700; }
-.sector-card .precio { color: var(--azul); font-weight: 800; margin-bottom: 12px; font-size: 15px; }
+.seccion-card:hover { border-color: var(--celeste); }
+.seccion-card.activa { border-color: var(--azul); background: var(--celeste-suave); }
+.seccion-card.agotada { opacity: .5; cursor: not-allowed; }
+.seccion-nombre { color: var(--marino); font-size: 14px; font-weight: 700; }
+.seccion-precio { color: var(--azul); font-weight: 800; font-size: 15px; }
+.seccion-disp { font-size: 12px; color: var(--gris); }
+
+/* Detalle de sección elegida */
+.seccion-detalle-box {
+  margin-top: 20px;
+  padding: 20px;
+  border: 1.5px solid var(--celeste);
+  border-radius: var(--radio);
+  background: var(--celeste-suave);
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 18px;
+  justify-content: space-between;
+}
+.seccion-detalle-info h4 { color: var(--marino); font-size: 16px; font-weight: 800; }
+.precio-unitario { color: var(--azul); font-weight: 800; font-size: 17px; margin-top: 4px; }
+.precio-unitario span { color: var(--gris); font-weight: 500; font-size: 12.5px; }
+.disponibilidad-msg { font-size: 12.5px; color: var(--gris); margin-top: 4px; }
+.seccion-subtotal { font-size: 14px; font-weight: 700; color: var(--marino); }
+
 .qty-control {
   display: flex;
   align-items: center;

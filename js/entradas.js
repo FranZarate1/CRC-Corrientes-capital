@@ -1,44 +1,83 @@
 // Prototipo de compra de entradas LNB — datos simulados, sin backend ni pagos reales.
 
+// ============================================================================
+// MAPA DEL ESTADIO — CONFIGURACIÓN PROVISORIA
+// Todavía no tenemos el plano real de sectores del estadio, así que esto es
+// una distribución de referencia (Platea Norte / Platea Sur / Populares).
+// Cuando tengamos el mapa definitivo, alcanza con reemplazar las zonas y
+// secciones acá abajo — el resto del código (render, carrito, checkout) no
+// necesita tocarse.
+// ============================================================================
+const MAPA_ESTADIO = {
+  zonas: [
+    {
+      id: "platea-norte",
+      nombre: "Platea Norte",
+      posicion: "norte", // referencia para una futura UI de mapa gráfico
+      secciones: [
+        { id: "pn-1", nombre: "Platea Norte - Sección 1" },
+        { id: "pn-2", nombre: "Platea Norte - Sección 2" },
+        { id: "pn-3", nombre: "Platea Norte - Sección 3" },
+      ],
+    },
+    {
+      id: "platea-sur",
+      nombre: "Platea Sur",
+      posicion: "sur",
+      secciones: [
+        { id: "ps-1", nombre: "Platea Sur - Sección 1" },
+        { id: "ps-2", nombre: "Platea Sur - Sección 2" },
+        { id: "ps-3", nombre: "Platea Sur - Sección 3" },
+      ],
+    },
+    {
+      id: "populares",
+      nombre: "Populares",
+      posicion: "derecha",
+      secciones: [
+        { id: "pop-1", nombre: "Popular - Sección 1" },
+        { id: "pop-2", nombre: "Popular - Sección 2" },
+      ],
+    },
+  ],
+};
+
+// Cantidad máxima de entradas por sección que se puede agregar en una misma compra (provisorio).
+const MAX_POR_COMPRA_SECCION = 6;
+
+// Precio por zona y disponibilidad por sección, particular de cada partido.
 const PARTIDOS = [
   {
     id: "p1",
     rival: "Regatas vs. San Lorenzo",
     fecha: "Vie 07/08/2026 — 21:00 hs",
     estadio: "Estadio José Jorge Contte",
-    sectores: [
-      { id: "popular", nombre: "Popular", precio: 8000 },
-      { id: "platea", nombre: "Platea", precio: 15000 },
-      { id: "vip", nombre: "Palco VIP", precio: 30000 },
-    ],
+    precios: { "platea-norte": 15000, "platea-sur": 15000, "populares": 8000 },
+    disponibilidad: { "pn-1": 38, "pn-2": 40, "pn-3": 12, "ps-1": 40, "ps-2": 22, "ps-3": 0, "pop-1": 75, "pop-2": 80 },
   },
   {
     id: "p2",
     rival: "Regatas vs. Boca Juniors",
     fecha: "Mar 18/08/2026 — 21:30 hs",
     estadio: "Estadio José Jorge Contte",
-    sectores: [
-      { id: "popular", nombre: "Popular", precio: 9000 },
-      { id: "platea", nombre: "Platea", precio: 17000 },
-      { id: "vip", nombre: "Palco VIP", precio: 35000 },
-    ],
+    precios: { "platea-norte": 17000, "platea-sur": 17000, "populares": 9000 },
+    disponibilidad: { "pn-1": 10, "pn-2": 5, "pn-3": 0, "ps-1": 18, "ps-2": 40, "ps-3": 40, "pop-1": 60, "pop-2": 30 },
   },
   {
     id: "p3",
     rival: "Regatas vs. Instituto",
     fecha: "Sáb 29/08/2026 — 20:00 hs",
     estadio: "Estadio José Jorge Contte",
-    sectores: [
-      { id: "popular", nombre: "Popular", precio: 8000 },
-      { id: "platea", nombre: "Platea", precio: 15000 },
-      { id: "vip", nombre: "Palco VIP", precio: 30000 },
-    ],
+    precios: { "platea-norte": 15000, "platea-sur": 15000, "populares": 8000 },
+    disponibilidad: { "pn-1": 40, "pn-2": 40, "pn-3": 40, "ps-1": 40, "ps-2": 40, "ps-3": 40, "pop-1": 80, "pop-2": 80 },
   },
 ];
 
 let partidoSeleccionado = null;
-const cantidades = {}; // sectorId -> cantidad
-let carrito = []; // { partidoId, rival, sectorId, sectorNombre, precio, cantidad }
+let zonaActiva = null;
+let seccionActiva = null;
+const cantidades = {}; // seccionId -> cantidad elegida (aún no agregada al carrito)
+let carrito = []; // { partidoId, rival, zonaId, zonaNombre, seccionId, seccionNombre, precio, cantidad }
 
 const $lista = document.getElementById("partido-lista");
 const $panel = document.getElementById("sectores-panel");
@@ -51,6 +90,14 @@ const $modalBox = document.getElementById("modal-box");
 
 function formatoARS(n) {
   return "$" + n.toLocaleString("es-AR");
+}
+
+function obtenerZona(zonaId) {
+  return MAPA_ESTADIO.zonas.find(z => z.id === zonaId);
+}
+
+function obtenerSeccion(zonaId, seccionId) {
+  return obtenerZona(zonaId).secciones.find(s => s.id === seccionId);
 }
 
 function renderPartidos() {
@@ -71,7 +118,8 @@ function renderPartidos() {
 
 function seleccionarPartido(id) {
   partidoSeleccionado = PARTIDOS.find(p => p.id === id);
-  for (const s of partidoSeleccionado.sectores) cantidades[s.id] = cantidades[s.id] || 0;
+  zonaActiva = MAPA_ESTADIO.zonas[0].id;
+  seccionActiva = null;
   renderSectores();
 }
 
@@ -79,50 +127,127 @@ function renderSectores() {
   if (!partidoSeleccionado) { $panel.innerHTML = ""; return; }
   const p = partidoSeleccionado;
   $panel.innerHTML = `
-    <h2 class="section-title">${p.rival} — elegí sector</h2>
-    <div class="sectores">
-      ${p.sectores.map(s => `
-        <div class="sector-card">
-          <h4>${s.nombre}</h4>
-          <div class="precio">${formatoARS(s.precio)}</div>
-          <div class="qty-control">
-            <button data-op="menos" data-sector="${s.id}">−</button>
-            <span id="qty-${s.id}">${cantidades[s.id]}</span>
-            <button data-op="mas" data-sector="${s.id}">+</button>
-          </div>
-        </div>
+    <h2 class="section-title">${p.rival} — elegí tu ubicación</h2>
+    <div class="zona-tabs">
+      ${MAPA_ESTADIO.zonas.map(z => `
+        <button class="zona-tab ${z.id === zonaActiva ? "activa" : ""}" data-zona="${z.id}">
+          <span>${z.nombre}</span>
+          <span class="zona-tab-precio">${formatoARS(p.precios[z.id])}</span>
+        </button>
       `).join("")}
     </div>
-    <button class="btn" style="margin-top:16px;" id="btn-agregar-carrito">Agregar al carrito</button>
+    <div class="zona-nota">Distribución de sectores provisoria — se actualizará cuando tengamos el mapa real del estadio.</div>
+    <div class="secciones-grid" id="secciones-grid"></div>
+    <div id="seccion-detalle"></div>
   `;
 
-  $panel.querySelectorAll("button[data-op]").forEach(btn => {
+  $panel.querySelectorAll("button[data-zona]").forEach(btn => {
     btn.addEventListener("click", () => {
-      const sid = btn.dataset.sector;
-      if (btn.dataset.op === "mas") cantidades[sid]++;
-      else cantidades[sid] = Math.max(0, cantidades[sid] - 1);
-      document.getElementById(`qty-${sid}`).textContent = cantidades[sid];
+      zonaActiva = btn.dataset.zona;
+      seccionActiva = null;
+      renderSectores();
     });
   });
 
-  document.getElementById("btn-agregar-carrito").addEventListener("click", agregarAlCarrito);
+  renderSecciones();
 }
 
-function agregarAlCarrito() {
+function renderSecciones() {
   const p = partidoSeleccionado;
-  let algoAgregado = false;
-  for (const s of p.sectores) {
-    const cant = cantidades[s.id];
-    if (cant > 0) {
-      const existente = carrito.find(it => it.partidoId === p.id && it.sectorId === s.id);
-      if (existente) existente.cantidad += cant;
-      else carrito.push({ partidoId: p.id, rival: p.rival, sectorId: s.id, sectorNombre: s.nombre, precio: s.precio, cantidad: cant });
-      algoAgregado = true;
-      cantidades[s.id] = 0;
+  const zona = obtenerZona(zonaActiva);
+  const $grid = document.getElementById("secciones-grid");
+
+  $grid.innerHTML = zona.secciones.map(s => {
+    const disponibles = p.disponibilidad[s.id] ?? 0;
+    const agotada = disponibles === 0;
+    return `
+      <button class="seccion-card ${seccionActiva === s.id ? "activa" : ""} ${agotada ? "agotada" : ""}"
+        data-seccion="${s.id}" ${agotada ? "disabled" : ""}>
+        <span class="seccion-nombre">${s.nombre}</span>
+        <span class="seccion-precio">${formatoARS(p.precios[zona.id])}</span>
+        <span class="seccion-disp">${agotada ? "Agotado" : disponibles + " disponibles"}</span>
+      </button>
+    `;
+  }).join("");
+
+  $grid.querySelectorAll("button[data-seccion]").forEach(btn => {
+    btn.addEventListener("click", () => {
+      seccionActiva = btn.dataset.seccion;
+      renderSecciones();
+    });
+  });
+
+  renderDetalleSeccion();
+}
+
+function renderDetalleSeccion() {
+  const $det = document.getElementById("seccion-detalle");
+  if (!seccionActiva) { $det.innerHTML = ""; return; }
+
+  const p = partidoSeleccionado;
+  const zona = obtenerZona(zonaActiva);
+  const s = obtenerSeccion(zonaActiva, seccionActiva);
+  const precio = p.precios[zona.id];
+  const disponibles = p.disponibilidad[s.id] ?? 0;
+  const limite = Math.min(disponibles, MAX_POR_COMPRA_SECCION);
+  cantidades[s.id] = Math.min(cantidades[s.id] || 0, limite);
+  const cant = cantidades[s.id];
+
+  $det.innerHTML = `
+    <div class="seccion-detalle-box">
+      <div class="seccion-detalle-info">
+        <h4>${s.nombre}</h4>
+        <div class="precio-unitario">${formatoARS(precio)} <span>por entrada</span></div>
+        <div class="disponibilidad-msg">${disponibles} entradas disponibles · máximo ${limite || 0} por compra</div>
+      </div>
+      <div class="qty-control">
+        <button data-op="menos">−</button>
+        <span id="qty-${s.id}">${cant}</span>
+        <button data-op="mas">+</button>
+      </div>
+      <div class="seccion-subtotal">Subtotal: <strong id="subtotal-${s.id}">${formatoARS(precio * cant)}</strong></div>
+      <button class="btn" id="btn-agregar-seccion" ${cant === 0 ? "disabled" : ""}>Agregar al carrito</button>
+    </div>
+  `;
+
+  $det.querySelector('button[data-op="mas"]').addEventListener("click", () => {
+    if (cantidades[s.id] < limite) {
+      cantidades[s.id]++;
+      actualizarDetalleQty(s.id, precio);
     }
-  }
-  if (algoAgregado) renderCarrito();
-  renderSectores();
+  });
+  $det.querySelector('button[data-op="menos"]').addEventListener("click", () => {
+    cantidades[s.id] = Math.max(0, cantidades[s.id] - 1);
+    actualizarDetalleQty(s.id, precio);
+  });
+  document.getElementById("btn-agregar-seccion").addEventListener("click", () => agregarSeccionAlCarrito(zona, s, precio));
+}
+
+function actualizarDetalleQty(seccionId, precio) {
+  document.getElementById(`qty-${seccionId}`).textContent = cantidades[seccionId];
+  document.getElementById(`subtotal-${seccionId}`).textContent = formatoARS(precio * cantidades[seccionId]);
+  document.getElementById("btn-agregar-seccion").disabled = cantidades[seccionId] === 0;
+}
+
+function agregarSeccionAlCarrito(zona, seccion, precio) {
+  const cant = cantidades[seccion.id];
+  if (!cant) return;
+
+  const p = partidoSeleccionado;
+  const existente = carrito.find(it => it.partidoId === p.id && it.seccionId === seccion.id);
+  if (existente) existente.cantidad += cant;
+  else carrito.push({
+    partidoId: p.id, rival: p.rival,
+    zonaId: zona.id, zonaNombre: zona.nombre,
+    seccionId: seccion.id, seccionNombre: seccion.nombre,
+    precio, cantidad: cant,
+  });
+
+  p.disponibilidad[seccion.id] -= cant;
+  cantidades[seccion.id] = 0;
+
+  renderCarrito();
+  renderSecciones();
 }
 
 function renderCarrito() {
@@ -137,7 +262,7 @@ function renderCarrito() {
   $btnCheckout.disabled = false;
   $carritoItems.innerHTML = carrito.map((it, idx) => `
     <li>
-      <span>${it.cantidad}× ${it.sectorNombre} — ${it.rival}</span>
+      <span>${it.cantidad}× ${it.seccionNombre} — ${it.rival}</span>
       <span>
         ${formatoARS(it.precio * it.cantidad)}
         <button data-idx="${idx}" style="border:none;background:none;color:#c0392b;cursor:pointer;">✕</button>
@@ -147,8 +272,13 @@ function renderCarrito() {
 
   $carritoItems.querySelectorAll("button[data-idx]").forEach(btn => {
     btn.addEventListener("click", () => {
-      carrito.splice(Number(btn.dataset.idx), 1);
+      const idx = Number(btn.dataset.idx);
+      const it = carrito[idx];
+      const partido = PARTIDOS.find(p => p.id === it.partidoId);
+      partido.disponibilidad[it.seccionId] += it.cantidad;
+      carrito.splice(idx, 1);
       renderCarrito();
+      if (partidoSeleccionado && partidoSeleccionado.id === it.partidoId) renderSecciones();
     });
   });
 
