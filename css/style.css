@@ -324,26 +324,38 @@ footer.site-footer .social {
   box-shadow: var(--sombra);
 }
 .mapa-estadio-svg { width: 100%; max-width: 380px; height: auto; }
-.mapa-wedge {
-  stroke: var(--blanco);
-  stroke-width: 2;
+.mapa-banda {
+  stroke-width: 1.5;
   cursor: pointer;
   transition: filter .15s ease, stroke .15s ease, stroke-width .15s ease;
 }
-.mapa-wedge:hover { filter: brightness(1.06); }
-.mapa-wedge.activa { stroke: var(--marino); stroke-width: 3; }
-.mapa-wedge.placeholder { cursor: not-allowed; }
-.mapa-wedge-label {
+.mapa-banda:hover { filter: brightness(1.06); }
+.mapa-banda.activa { stroke: var(--marino) !important; stroke-width: 3; }
+.mapa-banda.placeholder { cursor: not-allowed; }
+.mapa-banda-label {
   font-size: 11px;
   font-weight: 700;
   fill: var(--marino);
   pointer-events: none;
 }
-.mapa-wedge-precio {
-  font-size: 10px;
+/* Leyenda del mapa */
+.mapa-leyenda {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 14px;
+  justify-content: center;
+  margin-top: 12px;
+  font-size: 12.5px;
+  color: var(--gris);
   font-weight: 600;
-  fill: var(--azul);
-  pointer-events: none;
+}
+.mapa-leyenda span { display: flex; align-items: center; gap: 6px; }
+.mapa-leyenda-swatch {
+  width: 14px;
+  height: 14px;
+  border-radius: 4px;
+  border: 1.5px solid;
+  display: inline-block;
 }
 
 /* Zonas del estadio (tabs) */
@@ -378,34 +390,6 @@ footer.site-footer .social {
   font-style: italic;
 }
 
-/* Secciones dentro de una zona */
-.secciones-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(190px, 1fr));
-  gap: 14px;
-  margin-top: 18px;
-}
-.seccion-card {
-  display: flex;
-  flex-direction: column;
-  align-items: flex-start;
-  gap: 6px;
-  border: 1.5px solid var(--borde);
-  border-radius: 12px;
-  padding: 16px;
-  background: var(--blanco);
-  box-shadow: var(--sombra);
-  cursor: pointer;
-  text-align: left;
-  transition: border-color .18s ease, background .18s ease;
-}
-.seccion-card:hover { border-color: var(--celeste); }
-.seccion-card.activa { border-color: var(--azul); background: var(--celeste-suave); }
-.seccion-card.agotada { opacity: .5; cursor: not-allowed; }
-.seccion-nombre { color: var(--marino); font-size: 14px; font-weight: 700; }
-.seccion-precio { color: var(--azul); font-weight: 800; font-size: 15px; }
-.seccion-disp { font-size: 12px; color: var(--gris); }
-
 /* Detalle de sección elegida */
 .seccion-detalle-box {
   margin-top: 20px;
@@ -424,6 +408,138 @@ footer.site-footer .social {
 .precio-unitario span { color: var(--gris); font-weight: 500; font-size: 12.5px; }
 .disponibilidad-msg { font-size: 12.5px; color: var(--gris); margin-top: 4px; }
 .seccion-subtotal { font-size: 14px; font-weight: 700; color: var(--marino); }
+
+/* Plano de butacas estilo cine */
+.seat-picker {
+  flex-direction: column;
+  align-items: stretch;
+  gap: 14px;
+}
+.seat-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  background: var(--blanco);
+  border: 1px solid var(--borde);
+  border-radius: 12px;
+  padding: 16px 12px;
+  overflow-x: auto;
+}
+.seat-map-contexto {
+  width: 100%;
+  max-width: 260px;
+  margin-bottom: 4px;
+  pointer-events: none; /* es solo referencia visual, no repite la selección de zona */
+}
+.seat-map-contexto .mapa-banda { cursor: default; }
+.seat-map-contexto-nota {
+  font-size: 11px;
+  color: var(--gris);
+  font-style: italic;
+  text-align: center;
+  max-width: 260px;
+  margin-bottom: 4px;
+}
+.seat-map-seccion {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+  margin-top: 10px;
+  padding-top: 10px;
+  border-top: 1px dashed var(--borde);
+}
+.seat-map-seccion:first-of-type { border-top: none; margin-top: 0; }
+.seat-map-seccion-titulo {
+  font-size: 12.5px;
+  font-weight: 700;
+  color: var(--marino);
+  margin-bottom: 2px;
+}
+.seat-row {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+.spatial-seats-grid {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  width: 100%;
+}
+.spatial-seats-grid.align-izq {
+  align-items: flex-start;
+  padding-left: 0;
+  margin-left: 15px;
+}
+.spatial-seats-grid.align-centro {
+  align-items: center;
+}
+.spatial-seats-grid.align-der {
+  align-items: flex-end;
+  padding-right: 0;
+  margin-right: 15px;
+}
+.court-representation-horizontal {
+  width: 420px;
+  margin: 12px auto;
+  text-align: center;
+}
+.cancha-piso-svg {
+  width: 100%;
+  height: auto;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.04);
+  border-radius: 4px;
+}
+.spatial-seat-map-wrapper {
+  width: 420px;
+  display: flex;
+  flex-direction: column;
+}
+.seat-row-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--gris);
+  width: 20px;
+  text-align: right;
+  flex-shrink: 0;
+}
+.seat-row-asientos {
+  display: flex;
+  gap: 5px;
+}
+.seat {
+  width: 24px;
+  height: 24px;
+  border-radius: 6px 6px 3px 3px;
+  border: none;
+  font-size: 10px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: transform .1s ease, filter .1s ease;
+  flex-shrink: 0;
+}
+.seat.disponible { background: var(--azul); color: #fff; }
+.seat.disponible:hover { filter: brightness(1.15); transform: translateY(-1px); }
+.seat.seleccionado { background: #1e7a38; color: #fff; }
+.seat.ocupado { background: #c23a3a; color: #fff; cursor: not-allowed; }
+
+.seat-legend {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 16px;
+  justify-content: center;
+  font-size: 12.5px;
+  color: var(--gris);
+  font-weight: 600;
+}
+.seat-legend span { display: flex; align-items: center; gap: 6px; }
+.seat-swatch { width: 14px; height: 14px; border-radius: 4px; display: inline-block; }
+.seat-swatch.disponible { background: var(--azul); }
+.seat-swatch.seleccionado { background: #1e7a38; }
+.seat-swatch.ocupado { background: #c23a3a; }
 
 .qty-control {
   display: flex;
