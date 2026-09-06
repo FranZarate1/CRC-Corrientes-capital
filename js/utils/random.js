@@ -29,11 +29,18 @@ function mulberry32(a) {
 
 export function generarAsientos(semilla, filas, porFila) {
   const rand = mulberry32(xmur3(semilla)());
-  const ocupacionPct = 0.15 + rand() * 0.45; // entre 15% y 60% ocupado, varía por sección
+  const ocupacionPct = 0.18 + rand() * 0.14; // ~18% a 32% ocupado, simulando disponibilidad real
   const asientos = [];
-  for (let f = 1; f <= filas; f++) {
+  const filaArray = Array.isArray(filas) ? filas : Array.from({ length: filas }, (_, i) => i + 1);
+
+  for (const f of filaArray) {
     for (let n = 1; n <= porFila; n++) {
-      asientos.push({ id: `F${f}-A${n}`, fila: f, numero: n, ocupado: rand() < ocupacionPct });
+      asientos.push({
+        id: `F${f}-A${n}`,
+        fila: f,
+        numero: n,
+        ocupado: rand() < ocupacionPct,
+      });
     }
   }
   return asientos;

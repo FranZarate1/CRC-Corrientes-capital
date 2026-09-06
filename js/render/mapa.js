@@ -1,103 +1,278 @@
-import { MAPA_VISUAL } from "../config/estadio.js";
-import { obtenerZona, formatoARS } from "../utils/formato.js";
+import { formatoARS } from "../utils/formato.js";
+import { claveAsiento } from "../utils/formato.js";
 import estado from "../estado.js";
 
-function renderCanchaSVG() {
+// ── Cancha de básquet central (alineada 1:1 con el ancho total de las plateas) ──
+export function renderCanchaSVG() {
   return `
-    <g class="cancha-mini">
-      <rect x="140" y="120" width="140" height="80" rx="6" fill="#e3b579" stroke="#a9784f" stroke-width="2"></rect>
-      <line x1="210" y1="120" x2="210" y2="200" stroke="#fff" stroke-width="1.5"></line>
-      <circle cx="210" cy="160" r="13" fill="none" stroke="#fff" stroke-width="1.5"></circle>
-      <circle cx="210" cy="160" r="2" fill="#fff"></circle>
+    <svg viewBox="0 0 460 170" class="arena-cancha-svg" role="img" aria-label="Cancha oficial de básquet del Club de Regatas Corrientes">
+      <defs>
+        <pattern id="parquet-slats" width="16" height="16" patternUnits="userSpaceOnUse">
+          <line x1="0" y1="0" x2="16" y2="0" stroke="#f0e4d2" stroke-width="0.5" opacity="0.6"/>
+          <line x1="8" y1="0" x2="8" y2="16" stroke="#f0e4d2" stroke-width="0.5" opacity="0.4"/>
+        </pattern>
+      </defs>
 
-      <rect x="140" y="140" width="30" height="40" fill="none" stroke="#fff" stroke-width="1.3"></rect>
-      <circle cx="170" cy="160" r="11" fill="none" stroke="#fff" stroke-width="1.3"></circle>
-      <path d="M 140 130 Q 190 160 140 190" fill="none" stroke="#fff" stroke-width="1.3"></path>
-      <circle cx="148" cy="160" r="2.5" fill="none" stroke="#fff" stroke-width="1.3"></circle>
+      <!-- Piso de parquet madera -->
+      <rect x="2" y="2" width="456" height="166" rx="8" fill="#f5ede3" stroke="#ddccb4" stroke-width="1.5"/>
+      <rect x="2" y="2" width="456" height="166" rx="8" fill="url(#parquet-slats)" opacity="0.75"/>
 
-      <rect x="250" y="140" width="30" height="40" fill="none" stroke="#fff" stroke-width="1.3"></rect>
-      <circle cx="250" cy="160" r="11" fill="none" stroke="#fff" stroke-width="1.3"></circle>
-      <path d="M 280 130 Q 230 160 280 190" fill="none" stroke="#fff" stroke-width="1.3"></path>
-      <circle cx="272" cy="160" r="2.5" fill="none" stroke="#fff" stroke-width="1.3"></circle>
-    </g>
+      <!-- Línea perimetral interior -->
+      <rect x="12" y="10" width="436" height="150" fill="none" stroke="#d5c4b0" stroke-width="1.4"/>
+
+      <!-- Línea central de mitad de campo -->
+      <line x1="230" y1="10" x2="230" y2="160" stroke="#d5c4b0" stroke-width="1.4"/>
+
+      <!-- Círculo central con REGATAS -->
+      <circle cx="230" cy="85" r="32" fill="none" stroke="#d5c4b0" stroke-width="1.4"/>
+      <circle cx="230" cy="85" r="1.8" fill="#d5c4b0"/>
+      <text x="230" y="88.5" fill="#a08d77" font-size="10" font-weight="800" letter-spacing="2.5"
+            text-anchor="middle" font-family="'Inter', sans-serif">REGATAS</text>
+
+      <!-- ── LLAVE IZQUIERDA (Zona pintada) ──────────────── -->
+      <rect x="12" y="52" width="72" height="66" fill="rgba(215, 195, 170, 0.18)" stroke="#d5c4b0" stroke-width="1.4"/>
+      <path d="M 84 52 a 33 33 0 0 1 0 66" fill="none" stroke="#d5c4b0" stroke-width="1.4"/>
+      <path d="M 84 52 a 33 33 0 0 0 0 66" fill="none" stroke="#d5c4b0" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Tablero y aro izquierdo -->
+      <line x1="26" y1="68" x2="26" y2="102" stroke="#bfaaa0" stroke-width="2.2"/>
+      <line x1="26" y1="85" x2="32" y2="85" stroke="#bfaaa0" stroke-width="1.4"/>
+      <circle cx="36" cy="85" r="5.5" fill="none" stroke="#ba8257" stroke-width="1.8"/>
+      <!-- Triple izquierdo -->
+      <path d="M 12 22 L 48 22 A 75 75 0 0 1 48 148 L 12 148" fill="none" stroke="#d5c4b0" stroke-width="1.4"/>
+
+      <!-- ── LLAVE DERECHA (Zona pintada) ───────────────── -->
+      <rect x="376" y="52" width="72" height="66" fill="rgba(215, 195, 170, 0.18)" stroke="#d5c4b0" stroke-width="1.4"/>
+      <path d="M 376 52 a 33 33 0 0 0 0 66" fill="none" stroke="#d5c4b0" stroke-width="1.4"/>
+      <path d="M 376 52 a 33 33 0 0 1 0 66" fill="none" stroke="#d5c4b0" stroke-width="1" stroke-dasharray="3,3"/>
+      <!-- Tablero y aro derecho -->
+      <line x1="434" y1="68" x2="434" y2="102" stroke="#bfaaa0" stroke-width="2.2"/>
+      <line x1="434" y1="85" x2="428" y2="85" stroke="#bfaaa0" stroke-width="1.4"/>
+      <circle cx="424" cy="85" r="5.5" fill="none" stroke="#ba8257" stroke-width="1.8"/>
+      <!-- Triple derecho -->
+      <path d="M 448 22 L 412 22 A 75 75 0 0 0 412 148 L 448 148" fill="none" stroke="#d5c4b0" stroke-width="1.4"/>
+    </svg>
   `;
 }
 
-function renderBandasYCanchaSVG(p) {
-  const bandas = MAPA_VISUAL.bandas.map(banda => {
-    const zona = banda.zona ? obtenerZona(banda.zona) : null;
-    const activa = banda.zona && banda.zona === estado.zonaActiva;
-    const fill = activa ? banda.colorActiva : banda.color;
+// ── Render de 3 bloques de asientos con pasillos centrales ───────
+function renderFilasDeAsientos(filas, seccionId, asientosData) {
+  const mapaAsientos = new Map();
+  (asientosData || []).forEach(a => {
+    mapaAsientos.set(`${a.fila}-${a.numero}`, a);
+  });
 
-    if (!zona) {
-      const cx = banda.x + banda.width / 2;
-      const cy = banda.y + banda.height / 2;
-      return `
-        <g>
-          <rect class="mapa-banda placeholder" x="${banda.x}" y="${banda.y}" width="${banda.width}" height="${banda.height}" rx="6" fill="${fill}" stroke="${banda.stroke}">
-            <title>${banda.nombre} (a definir)</title>
-          </rect>
-          <text x="${cx}" y="${cy}" class="mapa-banda-label" text-anchor="middle">${banda.nombre}</text>
-        </g>
-      `;
+  return filas.map(filaLetra => {
+    // Bloque 1: Asientos 1 a 8
+    const b1 = [];
+    for (let n = 1; n <= 8; n++) {
+      const a = mapaAsientos.get(`${filaLetra}-${n}`) || { id: `F${filaLetra}-A${n}`, fila: filaLetra, numero: n, ocupado: false };
+      b1.push(renderBotonAsiento(seccionId, a));
     }
 
-    const secciones = zona.secciones;
-    const n = secciones.length;
-    const largo = banda.eje === "x" ? banda.width : banda.height;
-    const medida = (largo - banda.gap * (n - 1)) / n;
-    const precio = formatoARS(p.precios[zona.id]);
+    // Bloque 2: Asientos 9 a 16 (Sector Central)
+    const b2 = [];
+    for (let n = 9; n <= 16; n++) {
+      const a = mapaAsientos.get(`${filaLetra}-${n}`) || { id: `F${filaLetra}-A${n}`, fila: filaLetra, numero: n, ocupado: false };
+      b2.push(renderBotonAsiento(seccionId, a));
+    }
 
-    return secciones.map((s, i) => {
-      let sx = banda.x, sy = banda.y, sw = banda.width, sh = banda.height;
-      if (banda.eje === "x") { sx = banda.x + i * (medida + banda.gap); sw = medida; }
-      else { sy = banda.y + i * (medida + banda.gap); sh = medida; }
-      const cx = sx + sw / 2, cy = sy + sh / 2;
-      
-      const isSeccionActiva = s.id === estado.seccionActiva;
-      const isHighlighted = isSeccionActiva || (activa && !estado.seccionActiva);
-      const strokeColor = isHighlighted ? "#0b2447" : banda.stroke;
-      const strokeWidth = isHighlighted ? 3 : 1.5;
+    // Bloque 3: Asientos 17 a 24
+    const b3 = [];
+    for (let n = 17; n <= 24; n++) {
+      const a = mapaAsientos.get(`${filaLetra}-${n}`) || { id: `F${filaLetra}-A${n}`, fila: filaLetra, numero: n, ocupado: false };
+      b3.push(renderBotonAsiento(seccionId, a));
+    }
 
-      return `
-        <g>
-          <rect class="mapa-banda ${isHighlighted ? "activa" : ""}" data-zona="${banda.zona}" data-seccion="${s.id}" x="${sx}" y="${sy}" width="${sw}" height="${sh}" rx="6" fill="${isHighlighted ? banda.colorActiva : fill}" stroke="${strokeColor}" stroke-width="${strokeWidth}">
-            <title>${s.nombre} — ${precio}</title>
-          </rect>
-          <text x="${cx}" y="${cy}" class="mapa-banda-label" text-anchor="middle">${i + 1}</text>
-        </g>
-      `;
-    }).join("");
+    return `
+      <div class="arena-seat-row">
+        <span class="arena-row-label left" aria-hidden="true">${filaLetra}</span>
+        <div class="arena-seat-block block-1">${b1.join("")}</div>
+        <div class="arena-aisle" aria-hidden="true"></div>
+        <div class="arena-seat-block block-2">${b2.join("")}</div>
+        <div class="arena-aisle" aria-hidden="true"></div>
+        <div class="arena-seat-block block-3">${b3.join("")}</div>
+        <span class="arena-row-label right" aria-hidden="true">${filaLetra}</span>
+      </div>
+    `;
   }).join("");
-
-  return `${bandas}${renderCanchaSVG()}`;
 }
 
-export function renderMapaEstadio(p) {
+function renderBotonAsiento(seccionId, a) {
+  const clave = claveAsiento(seccionId, a.id);
+  const esSeleccionado = estado.asientosSeleccionados.has(clave);
+
+  let estadoClase = "disponible";
+  if (a.ocupado) estadoClase = "ocupado";
+  else if (esSeleccionado) estadoClase = "tu-seleccion";
+
   return `
-    <svg viewBox="0 0 ${MAPA_VISUAL.ancho} ${MAPA_VISUAL.alto}" class="mapa-estadio-svg" role="img" aria-label="Mapa del estadio, tocá una zona para ver las entradas">
-      ${renderBandasYCanchaSVG(p)}
-    </svg>
+    <button type="button"
+            class="arena-seat ${estadoClase}"
+            data-seccion="${seccionId}"
+            data-asiento="${a.id}"
+            ${a.ocupado ? "disabled aria-disabled='true'" : ""}
+            aria-pressed="${esSeleccionado}"
+            aria-label="Fila ${a.fila}, Asiento ${a.numero}${a.ocupado ? ' (ocupado)' : ''}"
+            title="Fila ${a.fila} — Asiento ${a.numero}">
+      ${a.numero}
+    </button>
   `;
 }
 
-// Vista "con zoom" de una zona puntual: recorta el viewBox para acercar la cancha
-// y la tribuna elegida, en vez de mostrar el estadio entero de lejos.
-export function renderMapaZoom(p, zonaId) {
-  const viewBox = MAPA_VISUAL.zoom[zonaId] || `0 0 ${MAPA_VISUAL.ancho} ${MAPA_VISUAL.alto}`;
-  return `
-    <svg viewBox="${viewBox}" class="mapa-estadio-svg mapa-zoom" role="img" aria-label="Zoom de la cancha y la tribuna elegida">
-      ${renderBandasYCanchaSVG(p)}
-    </svg>
-  `;
-}
+// ── Render vista completa de la arena con 3 sectores ──────────
+export function renderMapaArena(p, { cantPersonas = 2, zoom = 100 } = {}) {
+  const precioRio = p.rangos?.["lado-rio"] || "$18.000 – $24.000";
+  const precioParque = p.rangos?.["parque"] || "$15.000 – $21.000";
+  const precioNorte = formatoARS(p.precios["general-norte"] || 9000);
+  const precioSur = formatoARS(p.precios["general-sur"] || 9000);
 
-export function renderLeyendaMapa() {
+  let cantNorte = 0;
+  let cantSur = 0;
+  estado.asientosSeleccionados.forEach(clave => {
+    if (clave.startsWith("general-norte::")) cantNorte++;
+    if (clave.startsWith("general-sur::")) cantSur++;
+  });
+
   return `
-    <div class="mapa-leyenda">
-      ${MAPA_VISUAL.bandas.map(b => `
-        <span><i class="mapa-leyenda-swatch" style="background:${b.color};border-color:${b.stroke}"></i>${b.zona ? obtenerZona(b.zona).nombre : b.nombre}</span>
-      `).join("")}
+    <div class="arena-card">
+      <!-- Barra superior de filtros -->
+      <div class="arena-top-toolbar">
+        <div class="arena-toolbar-left">
+          <span class="arena-toolbar-label">¿Cuántos vienen?</span>
+          <div class="arena-stepper">
+            <button type="button" class="stepper-btn" id="btn-stepper-menos" aria-label="Menos personas">−</button>
+            <span class="stepper-value" id="stepper-val">${cantPersonas} persona${cantPersonas > 1 ? "s" : ""}</span>
+            <button type="button" class="stepper-btn" id="btn-stepper-mas" aria-label="Más personas">+</button>
+          </div>
+          <div class="arena-dropdown-wrap">
+            <button type="button" class="arena-select-btn" id="btn-filtro-vista">
+              <span>Mejor vista</span>
+              <span class="dropdown-chevron">▾</span>
+            </button>
+          </div>
+        </div>
+
+        <button type="button" class="btn-buscar-juntos" id="btn-buscar-juntos">
+          <span class="sparkle-icon">✦</span> Buscar juntos
+        </button>
+      </div>
+
+      <!-- Sub-barra: Butacas y generales + Restablecer -->
+      <div class="arena-subbar">
+        <div class="arena-subbar-title">
+          <span class="subbar-bullet">•</span> Butacas y generales (3 sectores por platea a lo largo de la cancha)
+        </div>
+        <button type="button" class="btn-restablecer" id="btn-restablecer">
+          Restablecer
+        </button>
+      </div>
+
+      <!-- Contenedor con zoom de la cancha y tribunas -->
+      <div class="arena-viewport" id="arena-viewport" style="transform: scale(${zoom / 100}); transform-origin: top center;">
+        
+        <!-- ── PLATEA RÍO (Superior) ─────────────────────────── -->
+        <section class="arena-tribuna tribuna-rio" aria-label="Platea Río">
+          <div class="arena-tribuna-header">
+            <div class="arena-tribuna-titulo">
+              <span class="tribuna-simbolo">≈</span> PLATEA RÍO
+            </div>
+            <div class="arena-tribuna-precio">${precioRio}</div>
+          </div>
+
+          <!-- Indicadores de los 3 sectores -->
+          <div class="arena-sectores-header">
+            <span class="sector-pill">SECTOR 1 (1 - 8)</span>
+            <span class="sector-pill centro">SECTOR 2 · CENTRAL (9 - 16)</span>
+            <span class="sector-pill">SECTOR 3 (17 - 24)</span>
+          </div>
+
+          <div class="arena-filas-wrap">
+            ${renderFilasDeAsientos(["D", "C", "B", "A"], "lado-rio", p.asientos["lado-rio"])}
+          </div>
+
+          <div class="arena-linea-lateral">LÍNEA LATERAL</div>
+        </section>
+
+        <!-- ── CENTRO: GENERAL NORTE + CANCHA + GENERAL SUR ─── -->
+        <div class="arena-middle-row">
+          <!-- General Norte (Cabecera Norte) -->
+          <div class="arena-general-card ${cantNorte > 0 ? 'seleccionada' : ''}"
+               id="btn-general-norte"
+               data-general="general-norte"
+               role="button"
+               tabindex="0"
+               aria-label="General Norte, de pie, ${precioNorte}">
+            <div class="general-card-title">GENERAL<br>NORTE</div>
+            <div class="general-card-sub">De pie</div>
+            <div class="general-card-precio">${precioNorte}</div>
+            ${cantNorte > 0 ? `<div class="general-card-badge">${cantNorte} seleccionada${cantNorte > 1 ? 's' : ''}</div>` : ''}
+          </div>
+
+          <!-- Cancha central alineada 1:1 con el ancho de las plateas -->
+          <div class="arena-cancha-wrapper">
+            ${renderCanchaSVG()}
+          </div>
+
+          <!-- General Sur (Cabecera Sur) -->
+          <div class="arena-general-card ${cantSur > 0 ? 'seleccionada' : ''}"
+               id="btn-general-sur"
+               data-general="general-sur"
+               role="button"
+               tabindex="0"
+               aria-label="General Sur, de pie, ${precioSur}">
+            <div class="general-card-title">GENERAL<br>SUR</div>
+            <div class="general-card-sub">De pie</div>
+            <div class="general-card-precio">${precioSur}</div>
+            ${cantSur > 0 ? `<div class="general-card-badge">${cantSur} seleccionada${cantSur > 1 ? 's' : ''}</div>` : ''}
+          </div>
+        </div>
+
+        <!-- ── PLATEA PARQUE (Inferior) ──────────────────────── -->
+        <section class="arena-tribuna tribuna-parque" aria-label="Platea Parque">
+          <div class="arena-linea-lateral top">LÍNEA LATERAL</div>
+
+          <div class="arena-filas-wrap">
+            ${renderFilasDeAsientos(["A", "B", "C", "D"], "parque", p.asientos["parque"])}
+          </div>
+
+          <!-- Indicadores de los 3 sectores -->
+          <div class="arena-sectores-header bottom">
+            <span class="sector-pill">SECTOR 1 (1 - 8)</span>
+            <span class="sector-pill centro">SECTOR 2 · CENTRAL (9 - 16)</span>
+            <span class="sector-pill">SECTOR 3 (17 - 24)</span>
+          </div>
+
+          <div class="arena-tribuna-header bottom">
+            <div class="arena-tribuna-titulo">
+              <span class="tribuna-simbolo">♠</span> PLATEA PARQUE
+            </div>
+            <div class="arena-tribuna-precio">${precioParque}</div>
+            <div class="arena-acceso-label">ACCESO PRINCIPAL ↑</div>
+          </div>
+        </section>
+
+      </div>
+
+      <!-- Barra inferior: Referencias + Control de Zoom -->
+      <div class="arena-bottom-bar">
+        <div class="arena-legend" aria-label="Referencias de asientos">
+          <span class="legend-item">
+            <i class="legend-swatch disponible" aria-hidden="true"></i> Disponible
+          </span>
+          <span class="legend-item">
+            <i class="legend-swatch tu-seleccion" aria-hidden="true"></i> Tu selección
+          </span>
+          <span class="legend-item">
+            <i class="legend-swatch ocupado" aria-hidden="true"></i> Ocupado
+          </span>
+        </div>
+
+        <div class="arena-zoom-widget" aria-label="Control de zoom">
+          <button type="button" class="zoom-btn" id="btn-zoom-menos" aria-label="Reducir zoom">−</button>
+          <span class="zoom-pct" id="zoom-pct">${zoom}%</span>
+          <button type="button" class="zoom-btn" id="btn-zoom-mas" aria-label="Aumentar zoom">+</button>
+        </div>
+      </div>
     </div>
   `;
 }
