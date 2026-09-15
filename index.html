@@ -3,9 +3,9 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<meta name="description" content="Comprá tus entradas para los partidos de Regatas Corrientes en la Liga Nacional de Básquet. Elegí tu sector y asiento online.">
+<meta name="description" content="Club de Regatas Corrientes — Sitio institucional, disciplinas deportivas, actividades societarias y venta de entradas para la Liga Nacional de Básquet (LNB).">
 <meta name="theme-color" content="#0b2447">
-<title>Comprar Entradas — Club de Regatas Corrientes · LNB</title>
+<title>Club de Regatas Corrientes · Sitio Oficial (Prototipo)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@500;600;700;800;900&display=swap" rel="stylesheet">
@@ -14,7 +14,7 @@
 <body>
 
 <div class="demo-banner" role="alert" aria-live="polite">
-  PROTOTIPO INTERNO — flujo de compra simulado, no se procesan pagos reales
+  PROTOTIPO INTERNO — inspirado en crc.org.ar — no es el sitio oficial, sin pagos reales
 </div>
 
 <header class="site-header">
@@ -26,101 +26,121 @@
   </div>
   <nav class="main-nav" aria-label="Navegación principal">
     <ul>
-      <li><a href="index.html">Portada</a></li>
-      <li><a href="index.html#socios">Socios</a></li>
-      <li><a href="index.html#institucional">Institucional</a></li>
-      <li><a href="index.html#deportes">Deportes</a></li>
-      <li><a href="index.html#actividades">Actividades</a></li>
-      <li><a href="index.html#beneficios">Beneficios</a></li>
-      <li><a href="index.html#lnb">LNB</a></li>
-      <li class="destacado"><a href="index.html" class="active" aria-current="page">🎟 Comprar Entradas</a></li>
+      <li><a href="index.html" class="active" aria-current="page">Portada</a></li>
+      <li><a href="#socios">Socios</a></li>
+      <li><a href="#institucional">Institucional</a></li>
+      <li><a href="#deportes">Deportes</a></li>
+      <li><a href="#actividades">Actividades</a></li>
+      <li><a href="#beneficios">Beneficios</a></li>
+      <li><a href="#lnb">LNB</a></li>
+      <li class="destacado"><a href="entradas.html">🎟 Comprar Entradas</a></li>
     </ul>
   </nav>
 </header>
 
-<!-- Hero con foto de estadio -->
+<!-- Hero institucional -->
 <div class="hero" role="banner">
   <div class="container hero-content">
-    <span class="hero-badge">🏀 Liga Nacional de Básquet · Temporada 2026</span>
-    <h1>Comprar Entradas</h1>
-    <p>Elegí el partido, tu zona y los asientos. Simulación interna de demostración.</p>
+    <span class="hero-badge">⚓ Fundado el 27 de Septiembre de 1923 · Corrientes, Argentina</span>
+    <h1>El Club más grande del Nordeste Argentino</h1>
+    <p>Institucional, deportes, actividades náuticas, vida social y toda la pasión de la Liga Nacional de Básquet en el Parque Mitre.</p>
+    <div style="margin-top: 24px; display: flex; gap: 14px; flex-wrap: wrap;">
+      <a href="entradas.html" class="btn" style="box-shadow: var(--sombra-hover);">🎟 Comprar Entradas LNB →</a>
+      <a href="#institucional" class="btn btn-outline" style="color: #fff; border-color: rgba(255,255,255,0.4);">Conocer más del Club</a>
+    </div>
   </div>
 </div>
 
-<!-- Indicador de pasos -->
-<div class="steps-bar" aria-label="Pasos de la compra">
+<!-- Banner Destacado / CTA Entradas -->
+<section id="entradas-cta" style="background: var(--blanco); border-bottom: 1px solid var(--borde);">
   <div class="container">
-    <ol class="steps-indicator" id="steps-indicator" role="list">
-      <li class="step active" data-step="1" role="listitem">
-        <span class="step-num" aria-hidden="true">1</span>
-        <span class="step-label">Partido</span>
-      </li>
-      <li class="step-sep" aria-hidden="true">›</li>
-      <li class="step" data-step="2" role="listitem">
-        <span class="step-num" aria-hidden="true">2</span>
-        <span class="step-label">Sector</span>
-      </li>
-      <li class="step-sep" aria-hidden="true">›</li>
-      <li class="step" data-step="3" role="listitem">
-        <span class="step-num" aria-hidden="true">3</span>
-        <span class="step-label">Asientos</span>
-      </li>
-      <li class="step-sep" aria-hidden="true">›</li>
-      <li class="step" data-step="4" role="listitem">
-        <span class="step-num" aria-hidden="true">4</span>
-        <span class="step-label">Ticket</span>
-      </li>
-    </ol>
+    <div class="cta-entradas">
+      <div class="cta-entradas-text">
+        <span class="partido-badge" style="display:inline-block; margin-bottom: 10px;">🏀 Liga Nacional de Básquet · Temporada 2026</span>
+        <h2 style="font-size: 26px; color: var(--marino); font-weight: 800; margin-bottom: 8px;">Viví la fiesta del Fantasma en el Contte</h2>
+        <p style="color: var(--gris); font-size: 15px; max-width: 600px;">
+          Adquirí tus entradas online para los próximos partidos como local. Elegí tu ubicación en el mapa interactivo con vista espacial a la cancha.
+        </p>
+      </div>
+      <a href="entradas.html" class="btn" style="min-width: 220px; text-align: center; justify-content: center;">
+        Ver Partidos y Ubicaciones →
+      </a>
+    </div>
   </div>
-</div>
+</section>
 
-<section>
-  <div class="container entradas-layout">
-
-    <!-- Columna principal -->
-    <main>
-      <h2 class="section-title">Próximos partidos como local</h2>
-      <div class="partido-lista" id="partido-lista" aria-live="polite">
-        <!-- generado por js/render/partidos.js -->
-      </div>
-
-      <div id="sectores-panel" aria-live="polite" style="margin-top: 30px;"></div>
-    </main>
-
-    <!-- Carrito lateral -->
-    <aside class="carrito-box" aria-label="Tu carrito de compras">
-      <div class="carrito-header">
-        <div class="carrito-icon" aria-hidden="true">
-          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
-            <path d="M4 5h16v5a2 2 0 0 0 0 4v5H4v-5a2 2 0 0 0 0-4V5Z"/>
-            <path d="M15 5v3m0 2v4m0 2v3"/>
-          </svg>
+<!-- Últimas Noticias -->
+<section id="institucional">
+  <div class="container">
+    <h2 class="section-title">Últimas noticias</h2>
+    <div class="noticias-grid">
+      <article class="card">
+        <div class="card-tag">Básquet · LNB</div>
+        <div class="card-body">
+          <h3>Gramajo es la primera ficha confirmada de Regatas</h3>
+          <p>El escolta tucumano Luciano Gramajo renovó su vínculo con el Remero para disputar la temporada 2026/27 de la máxima categoría.</p>
+          <span class="card-date">📅 Hace 2 días</span>
         </div>
-        <div>
-          <span class="carrito-kicker">Tu próximo partido</span>
-          <h3>Tus entradas</h3>
+      </article>
+
+      <article class="card">
+        <div class="card-tag">Básquet · LNB</div>
+        <div class="card-body">
+          <h3>Martín Villagrán tuvo su presentación oficial en Regatas</h3>
+          <p>El nuevo entrenador jefe fue presentado formalmente ante la prensa en el Salón de Fiestas y detalló los objetivos del equipo.</p>
+          <span class="card-date">📅 Hace 5 días</span>
         </div>
-      </div>
+      </article>
 
-      <ul id="carrito-items" aria-live="polite" aria-label="Items en el carrito"></ul>
-      <p class="carrito-vacio" id="carrito-vacio">Todavía no agregaste entradas.</p>
-
-      <div class="carrito-perforation" aria-hidden="true"></div>
-
-      <div class="carrito-totales">
-        <div class="carrito-total">
-          <span>Total</span>
-          <span id="carrito-total-monto" class="carrito-total-monto">$0</span>
+      <article class="card">
+        <div class="card-tag">Institucional</div>
+        <div class="card-body">
+          <h3>Regatas sumó a Fausto Ruesga como refuerzo de jerarquía</h3>
+          <p>El alero bahiense con paso por Europa vestirá la camiseta del Fantasma y se suma a la pretemporada en el Estadio de los Sueños.</p>
+          <span class="card-date">📅 Hace 1 semana</span>
         </div>
+      </article>
+    </div>
+  </div>
+</section>
+
+<!-- Deportes y Actividades -->
+<section id="deportes" style="background: var(--blanco); border-top: 1px solid var(--borde); border-bottom: 1px solid var(--borde);">
+  <div class="container">
+    <h2 class="section-title">Deportes y Actividades</h2>
+    <p style="color: var(--gris); margin-bottom: 24px; max-width: 680px;">
+      Más de 20 disciplinas deportivas y recreativas para toda la familia a orillas del Río Paraná.
+    </p>
+    <div class="deportes-grid">
+      <div class="deporte-tile"><span class="deporte-icon">🏀</span> Básquet</div>
+      <div class="deporte-tile"><span class="deporte-icon">🚣</span> Remo</div>
+      <div class="deporte-tile"><span class="deporte-icon">🏊</span> Natación</div>
+      <div class="deporte-tile"><span class="deporte-icon">🏓</span> Tenis de Mesa</div>
+      <div class="deporte-tile"><span class="deporte-icon">🥋</span> Judo</div>
+      <div class="deporte-tile"><span class="deporte-icon">🥋</span> Karate</div>
+      <div class="deporte-tile"><span class="deporte-icon">🥋</span> Taekwon Do</div>
+      <div class="deporte-tile"><span class="deporte-icon">⛵</span> Vela</div>
+      <div class="deporte-tile"><span class="deporte-icon">🏐</span> Vóley</div>
+      <div class="deporte-tile"><span class="deporte-icon">🧘</span> Yoga</div>
+      <div class="deporte-tile"><span class="deporte-icon">♟️</span> Ajedrez</div>
+      <div class="deporte-tile"><span class="deporte-icon">🏐</span> Cesto</div>
+    </div>
+  </div>
+</section>
+
+<!-- LNB y Abono -->
+<section id="lnb">
+  <div class="container">
+    <h2 class="section-title">LNB — Liga Nacional de Básquet</h2>
+    <div style="background: var(--blanco); border: 1px solid var(--borde); border-radius: var(--radio); padding: 32px; display: flex; flex-direction: column; gap: 16px; box-shadow: var(--sombra);">
+      <h3 style="color: var(--marino); font-size: 20px; font-weight: 800;">Temporada Oficial 2026 · Estadio José Jorge Contte</h3>
+      <p style="max-width: 680px; color: var(--gris);">
+        Seguí la campaña de Regatas Corrientes en el torneo más federal del país. Conseguí tus entradas para cada partido o asociate para acceder a beneficios exclusivos en plateas.
+      </p>
+      <div style="display: flex; gap: 14px; flex-wrap: wrap; margin-top: 8px;">
+        <a href="entradas.html" class="btn">Comprar Entradas Online →</a>
       </div>
-
-      <button class="btn carrito-btn-checkout" id="btn-checkout" disabled aria-label="Finalizar compra y ver ticket">
-        Ver mi ticket
-        <span class="btn-arrow" aria-hidden="true">↗</span>
-      </button>
-      <p class="carrito-nota">Demo · Sin cobros ni reservas reales</p>
-    </aside>
-
+    </div>
   </div>
 </section>
 
@@ -137,20 +157,5 @@
   </div>
 </footer>
 
-<!-- Modal de checkout (formulario de datos del comprador) -->
-<div class="modal-overlay" id="modal-overlay" role="dialog" aria-modal="true" aria-labelledby="modal-titulo">
-  <div class="modal-box" id="modal-box">
-    <!-- generado por js/checkout.js -->
-  </div>
-</div>
-
-<!-- Dialog del ticket final -->
-<dialog class="ticket-dialog" id="ticket-dialog" aria-labelledby="ticket-dialog-title">
-  <div id="ticket-dialog-content">
-    <!-- generado por js/checkout.js tras confirmación -->
-  </div>
-</dialog>
-
-<script type="module" src="js/main.js"></script>
 </body>
 </html>

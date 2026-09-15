@@ -80,16 +80,16 @@ export function renderSectores() {
   // 2. Clic en General Norte
   const btnGenNorte = $panel.querySelector("#btn-general-norte");
   if (btnGenNorte) {
-    btnGenNorte.addEventListener("click", () => {
-      toggleGeneral("general-norte");
+    btnGenNorte.addEventListener("click", (e) => {
+      manejarClickGeneral("general-norte", e);
     });
   }
 
   // 3. Clic en General Sur
   const btnGenSur = $panel.querySelector("#btn-general-sur");
   if (btnGenSur) {
-    btnGenSur.addEventListener("click", () => {
-      toggleGeneral("general-sur");
+    btnGenSur.addEventListener("click", (e) => {
+      manejarClickGeneral("general-sur", e);
     });
   }
 
@@ -168,22 +168,41 @@ function aplicarZoom() {
   if (zoomPct) zoomPct.textContent = `${zoomLevel}%`;
 }
 
-function toggleGeneral(zonaId) {
-  // Buscar claves existentes de esta general
+function manejarClickGeneral(zonaId, e) {
+  const stepBtn = e.target.closest(".gen-step-btn");
+  if (stepBtn) {
+    e.stopPropagation();
+    const action = stepBtn.dataset.action;
+    modificarGeneral(zonaId, action === "plus" ? 1 : -1);
+    return;
+  }
+
+  // Si hizo clic en la tarjeta fuera del stepper:
+  modificarGeneral(zonaId, 1);
+}
+
+function modificarGeneral(zonaId, delta) {
   const claves = Array.from(estado.asientosSeleccionados).filter(k => k.startsWith(`${zonaId}::`));
-  if (claves.length > 0) {
-    // Si ya tenía, quitamos una entrada o todas
-    estado.asientosSeleccionados.delete(claves[claves.length - 1]);
-  } else {
+
+  if (delta > 0) {
     if (estado.asientosSeleccionados.size >= MAX_POR_COMPRA_ZONA) {
       alert(`Podés seleccionar un máximo de ${MAX_POR_COMPRA_ZONA} entradas por compra.`);
       return;
     }
-    const nuevaClave = `${zonaId}::ticket-${Date.now()}`;
+    const nuevaClave = `${zonaId}::ticket-${Date.now()}-${Math.random().toString(36).slice(2, 7)}`;
     estado.asientosSeleccionados.add(nuevaClave);
+  } else if (delta < 0) {
+    if (claves.length > 0) {
+      estado.asientosSeleccionados.delete(claves[claves.length - 1]);
+    }
   }
+
   actualizarStep(3);
   renderSectores();
+}
+
+function toggleGeneral(zonaId) {
+  modificarGeneral(zonaId, 1);
 }
 
 function buscarAsientosJuntos(cantidad) {

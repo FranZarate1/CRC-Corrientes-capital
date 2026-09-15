@@ -201,11 +201,20 @@ export function renderMapaArena(p, { cantPersonas = 2, zoom = 100 } = {}) {
                data-general="general-norte"
                role="button"
                tabindex="0"
-               aria-label="General Norte, de pie, ${precioNorte}">
+               aria-label="General Norte, de pie, ${precioNorte}${cantNorte > 0 ? `, ${cantNorte} seleccionadas` : ''}">
             <div class="general-card-title">GENERAL<br>NORTE</div>
             <div class="general-card-sub">De pie</div>
             <div class="general-card-precio">${precioNorte}</div>
-            ${cantNorte > 0 ? `<div class="general-card-badge">${cantNorte} seleccionada${cantNorte > 1 ? 's' : ''}</div>` : ''}
+            ${cantNorte > 0 ? `
+              <div class="general-card-badge">${cantNorte}</div>
+              <div class="general-card-stepper" aria-label="Cantidad de entradas general norte">
+                <button type="button" class="gen-step-btn minus" data-action="minus" aria-label="Quitar una general norte" title="Quitar una">−</button>
+                <span class="gen-step-num">${cantNorte}</span>
+                <button type="button" class="gen-step-btn plus" data-action="plus" aria-label="Agregar otra general norte" title="Sumar una">+</button>
+              </div>
+            ` : `
+              <div class="general-card-hint">+ Elegir</div>
+            `}
           </div>
 
           <!-- Cancha central alineada 1:1 con el ancho de las plateas -->
@@ -219,11 +228,20 @@ export function renderMapaArena(p, { cantPersonas = 2, zoom = 100 } = {}) {
                data-general="general-sur"
                role="button"
                tabindex="0"
-               aria-label="General Sur, de pie, ${precioSur}">
+               aria-label="General Sur, de pie, ${precioSur}${cantSur > 0 ? `, ${cantSur} seleccionadas` : ''}">
             <div class="general-card-title">GENERAL<br>SUR</div>
             <div class="general-card-sub">De pie</div>
             <div class="general-card-precio">${precioSur}</div>
-            ${cantSur > 0 ? `<div class="general-card-badge">${cantSur} seleccionada${cantSur > 1 ? 's' : ''}</div>` : ''}
+            ${cantSur > 0 ? `
+              <div class="general-card-badge">${cantSur}</div>
+              <div class="general-card-stepper" aria-label="Cantidad de entradas general sur">
+                <button type="button" class="gen-step-btn minus" data-action="minus" aria-label="Quitar una general sur" title="Quitar una">−</button>
+                <span class="gen-step-num">${cantSur}</span>
+                <button type="button" class="gen-step-btn plus" data-action="plus" aria-label="Agregar otra general sur" title="Sumar una">+</button>
+              </div>
+            ` : `
+              <div class="general-card-hint">+ Elegir</div>
+            `}
           </div>
         </div>
 
