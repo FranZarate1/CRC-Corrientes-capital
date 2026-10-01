@@ -18,6 +18,19 @@ python -m http.server 8000
 
 y entrar a `http://localhost:8000/`.
 
+### Demo online
+
+La versión publicada en GitHub Pages puede recorrerse directamente desde el navegador:
+
+<https://franzarate1.github.io/CRC-Corrientes-capital/>
+
+También se puede acceder directamente al flujo de entradas desde:
+
+<https://franzarate1.github.io/CRC-Corrientes-capital/entradas.html>
+
+La demo online corresponde a la rama `feature` y mantiene el mismo alcance de prototipo:
+no procesa pagos, no reserva ubicaciones y no genera entradas válidas para ingresar.
+
 ## Estructura
 
 - `index.html` — portada (header, nav, noticias, deportes, LNB) con CTA a "Comprar Entradas".
