@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Club de Regatas Corrientes — Sitio institucional, disciplinas deportivas, actividades societarias y venta de entradas para la Liga Nacional de Básquet (LNB).">
 <meta name="theme-color" content="#0b2447">
+<link rel="icon" href="assets/regatas.png" type="image/png">
 <title>Club de Regatas Corrientes · Sitio Oficial (Prototipo)</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,18 +21,16 @@
 <header class="site-header">
   <div class="header-top">
     <a href="index.html" class="logo" aria-label="Club de Regatas Corrientes — Inicio">
-      <img src="https://crc.org.ar/w/wp-content/uploads/2024/05/LogoCRC.png" alt="Escudo del Club de Regatas Corrientes" width="40" height="40">
+      <img src="assets/regatas.png" alt="Escudo del Club de Regatas Corrientes" width="40" height="40">
       <span>Club de Regatas Corrientes</span>
     </a>
+    <button class="nav-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Abrir menú">☰ <span>Menú</span></button>
   </div>
-  <nav class="main-nav" aria-label="Navegación principal">
+  <nav class="main-nav" id="site-navigation" aria-label="Navegación principal">
     <ul>
       <li><a href="index.html" class="active" aria-current="page">Portada</a></li>
-      <li><a href="#socios">Socios</a></li>
-      <li><a href="#institucional">Institucional</a></li>
+      <li><a href="#institucional">Noticias</a></li>
       <li><a href="#deportes">Deportes</a></li>
-      <li><a href="#actividades">Actividades</a></li>
-      <li><a href="#beneficios">Beneficios</a></li>
       <li><a href="#lnb">LNB</a></li>
       <li class="destacado"><a href="entradas.html">🎟 Comprar Entradas</a></li>
     </ul>
@@ -59,11 +58,11 @@
         <span class="partido-badge" style="display:inline-block; margin-bottom: 10px;">🏀 Liga Nacional de Básquet · Temporada 2026</span>
         <h2 style="font-size: 26px; color: var(--marino); font-weight: 800; margin-bottom: 8px;">Viví la fiesta del Fantasma en el Contte</h2>
         <p style="color: var(--gris); font-size: 15px; max-width: 600px;">
-          Adquirí tus entradas online para los próximos partidos como local. Elegí tu ubicación en el mapa interactivo con vista espacial a la cancha.
+          Probá la compra de entradas con partidos simulados. Elegí tu ubicación en el mapa interactivo con vista espacial a la cancha.
         </p>
       </div>
       <a href="entradas.html" class="btn" style="min-width: 220px; text-align: center; justify-content: center;">
-        Ver Partidos y Ubicaciones →
+        Ver Partidos de Ejemplo →
       </a>
     </div>
   </div>
@@ -157,5 +156,6 @@
   </div>
 </footer>
 
+<script src="js/navigation.js" defer></script>
 </body>
 </html>

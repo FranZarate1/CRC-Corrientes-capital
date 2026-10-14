@@ -5,6 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="description" content="Comprá tus entradas para los partidos de Regatas Corrientes en la Liga Nacional de Básquet. Elegí tu sector y asiento online.">
 <meta name="theme-color" content="#0b2447">
+<link rel="icon" href="assets/regatas.png" type="image/png">
 <title>Comprar Entradas — Club de Regatas Corrientes · LNB</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -20,18 +21,16 @@
 <header class="site-header">
   <div class="header-top">
     <a href="index.html" class="logo" aria-label="Club de Regatas Corrientes — Inicio">
-      <img src="https://crc.org.ar/w/wp-content/uploads/2024/05/LogoCRC.png" alt="Escudo del Club de Regatas Corrientes" width="40" height="40">
+      <img src="assets/regatas.png" alt="Escudo del Club de Regatas Corrientes" width="40" height="40">
       <span>Club de Regatas Corrientes</span>
     </a>
+    <button class="nav-toggle" type="button" aria-controls="site-navigation" aria-expanded="false" aria-label="Abrir menú">☰ <span>Menú</span></button>
   </div>
-  <nav class="main-nav" aria-label="Navegación principal">
+  <nav class="main-nav" id="site-navigation" aria-label="Navegación principal">
     <ul>
       <li><a href="index.html">Portada</a></li>
-      <li><a href="index.html#socios">Socios</a></li>
-      <li><a href="index.html#institucional">Institucional</a></li>
+      <li><a href="index.html#institucional">Noticias</a></li>
       <li><a href="index.html#deportes">Deportes</a></li>
-      <li><a href="index.html#actividades">Actividades</a></li>
-      <li><a href="index.html#beneficios">Beneficios</a></li>
       <li><a href="index.html#lnb">LNB</a></li>
       <li class="destacado"><a href="entradas.html" class="active" aria-current="page">🎟 Comprar Entradas</a></li>
     </ul>
@@ -79,7 +78,7 @@
 
     <!-- Columna principal -->
     <main>
-      <h2 class="section-title">Próximos partidos como local</h2>
+      <h2 class="section-title">Partidos de demostración</h2>
       <div class="partido-lista" id="partido-lista" aria-live="polite">
         <!-- generado por js/render/partidos.js -->
       </div>
@@ -151,6 +150,7 @@
   </div>
 </dialog>
 
+<script src="js/navigation.js" defer></script>
 <script type="module" src="js/main.js"></script>
 </body>
 </html>

@@ -16,6 +16,7 @@ export function renderSectores() {
     return;
   }
 
+  const scrollLeft = $panel.querySelector("#arena-map-scroll")?.scrollLeft ?? 0;
   const p = estado.partidoSeleccionado;
 
   // Calcular total acumulado de lo actualmente seleccionado en el mapa
@@ -52,6 +53,7 @@ export function renderSectores() {
       </button>
     </div>
   `;
+  $panel.querySelector("#arena-map-scroll").scrollLeft = scrollLeft;
 
   // ── Vincular Eventos ─────────────────────────────────────────
 
@@ -74,6 +76,10 @@ export function renderSectores() {
 
       actualizarStep(3);
       renderSectores();
+      const nextSeat = Array.from($panel.querySelectorAll(".arena-seat")).find(seat =>
+        seat.dataset.seccion === seccionId && seat.dataset.asiento === asientoId
+      );
+      nextSeat?.focus({ preventScroll: true });
     });
   });
 
@@ -83,6 +89,12 @@ export function renderSectores() {
     btnGenNorte.addEventListener("click", (e) => {
       manejarClickGeneral("general-norte", e);
     });
+    btnGenNorte.addEventListener("keydown", e => {
+      if (e.target === btnGenNorte && (e.key === "Enter" || e.key === " ")) {
+        e.preventDefault();
+        modificarGeneral("general-norte", 1);
+      }
+    });
   }
 
   // 3. Clic en General Sur
@@ -90,6 +102,12 @@ export function renderSectores() {
   if (btnGenSur) {
     btnGenSur.addEventListener("click", (e) => {
       manejarClickGeneral("general-sur", e);
+    });
+    btnGenSur.addEventListener("keydown", e => {
+      if (e.target === btnGenSur && (e.key === "Enter" || e.key === " ")) {
+        e.preventDefault();
+        modificarGeneral("general-sur", 1);
+      }
     });
   }
 
@@ -345,6 +363,9 @@ function confirmarSeleccionAlCarrito() {
   if (carritoBox) {
     carritoBox.classList.add("carrito-updated");
     setTimeout(() => carritoBox.classList.remove("carrito-updated"), 600);
+    if (window.matchMedia("(max-width: 900px)").matches) {
+      carritoBox.scrollIntoView({ behavior: "smooth", block: "start" });
+    }
   }
 }
 

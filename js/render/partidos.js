@@ -10,9 +10,9 @@ export function renderPartidos() {
     const precioMin = Math.min(...Object.values(p.precios));
     const esSeleccionado = estado.partidoSeleccionado && estado.partidoSeleccionado.id === p.id;
     return `
-    <article class="partido-card ${esSeleccionado ? "seleccionado" : ""}" data-partido="${p.id}" role="button" tabindex="0" aria-pressed="${esSeleccionado}">
+    <article class="partido-card ${esSeleccionado ? "seleccionado" : ""}" data-partido="${p.id}">
       <div class="partido-info">
-        <div class="partido-badge">🏀 LNB · Local</div>
+        <div class="partido-badge">🏀 LNB · Demo</div>
         <h3>${p.rival}</h3>
         <div class="meta">
           <span class="meta-item">📅 ${p.fecha}</span>
@@ -24,7 +24,7 @@ export function renderPartidos() {
           <div class="partido-precio-desde">desde</div>
           <div class="partido-precio-monto">${formatoARS(precioMin)} <small>/ entrada</small></div>
         </div>
-        <button class="btn btn-sm ${esSeleccionado ? "btn-outline" : ""}" data-partido-btn="${p.id}" aria-label="Elegir sector para ${p.rival}">
+        <button class="btn btn-sm ${esSeleccionado ? "btn-outline" : ""}" data-partido-btn="${p.id}" aria-pressed="${esSeleccionado}" aria-label="Elegir sector para ${p.rival}">
           ${esSeleccionado ? "Partido elegido ✓" : "Elegir sector →"}
         </button>
       </div>

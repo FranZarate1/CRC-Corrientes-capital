@@ -144,12 +144,6 @@ export function renderMapaArena(p, { cantPersonas = 2, zoom = 100 } = {}) {
             <span class="stepper-value" id="stepper-val">${cantPersonas} persona${cantPersonas > 1 ? "s" : ""}</span>
             <button type="button" class="stepper-btn" id="btn-stepper-mas" aria-label="Más personas">+</button>
           </div>
-          <div class="arena-dropdown-wrap">
-            <button type="button" class="arena-select-btn" id="btn-filtro-vista">
-              <span>Mejor vista</span>
-              <span class="dropdown-chevron">▾</span>
-            </button>
-          </div>
         </div>
 
         <button type="button" class="btn-buscar-juntos" id="btn-buscar-juntos">
@@ -167,7 +161,9 @@ export function renderMapaArena(p, { cantPersonas = 2, zoom = 100 } = {}) {
         </button>
       </div>
 
-      <!-- Contenedor con zoom de la cancha y tribunas -->
+      <p class="arena-scroll-hint">Deslizá el plano hacia los lados para ver todas las butacas.</p>
+      <!-- En pantallas angostas, el plano se desplaza sin recortar asientos. -->
+      <div class="arena-map-scroll" id="arena-map-scroll" role="region" aria-label="Plano de asientos, desplazable horizontalmente" tabindex="0">
       <div class="arena-viewport" id="arena-viewport" style="transform: scale(${zoom / 100}); transform-origin: top center;">
         
         <!-- ── PLATEA RÍO (Superior) ─────────────────────────── -->
@@ -269,6 +265,7 @@ export function renderMapaArena(p, { cantPersonas = 2, zoom = 100 } = {}) {
           </div>
         </section>
 
+      </div>
       </div>
 
       <!-- Barra inferior: Referencias + Control de Zoom -->

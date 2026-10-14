@@ -34,7 +34,7 @@ no procesa pagos, no reserva ubicaciones y no genera entradas válidas para ingr
 ## Estructura
 
 - `index.html` — portada (header, nav, noticias, deportes, LNB) con CTA a "Comprar Entradas".
-- `entradas.html` — listado de próximos partidos, selección de sector/cantidad, carrito y
+- `entradas.html` — listado de partidos de demostración, selección de sector/cantidad, carrito y
   checkout simulado.
 - `css/style.css` — estilos compartidos.
 - `js/main.js` — punto de entrada que inicializa la aplicación.
@@ -44,6 +44,13 @@ no procesa pagos, no reserva ubicaciones y no genera entradas válidas para ingr
 - `js/config/` — datos simulados del estadio y de los partidos.
 - `js/render/` — renderizado de partidos, mapa y asientos.
 - `js/utils/` — utilidades de DOM, formato y generación de datos demo.
+
+## Mantenimiento del prototipo
+
+- El fixture, las fechas y los precios de ejemplo se editan en `js/config/partidos.js`. Son datos fijos: revisar antes de cada presentación. La interfaz los identifica como demostración para no confundirlos con partidos confirmados.
+- La distribución del estadio y el límite de entradas se editan en `js/config/estadio.js`. El plano visual está en `js/render/mapa.js`.
+- Los estilos compartidos, incluidos los ajustes para celular, están en `css/style.css`. El menú de ambas páginas usa `js/navigation.js`.
+- Probar la portada y el flujo de entradas a 320, 375, 430, 768 y 1024 px cuando se cambien tarjetas, textos, menú o plano. En el plano móvil, verificar que el desplazamiento horizontal se conserve al seleccionar una butaca.
 
 ## Alcance actual
 

@@ -116,7 +116,7 @@ function mostrarTicketFinal(nombre, nroOrden) {
       <!-- Top del ticket -->
       <div class="ticket-top">
         <div class="ticket-brand">
-          <img src="https://crc.org.ar/w/wp-content/uploads/2024/05/LogoCRC.png"
+          <img src="assets/regatas.png"
                alt="Escudo Regatas Corrientes" width="36" height="42">
           <div>
             <span class="ticket-brand-name">REGATAS CORRIENTES</span>

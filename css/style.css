@@ -3,8 +3,6 @@
    Design System Premium · Temporada 2026
 ================================================================ */
 
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Barlow+Condensed:wght@500;600;700;800;900&display=swap');
-
 /* ── Variables ────────────────────────────────────────────────── */
 :root {
   --azul:           #1565c0;
@@ -105,6 +103,7 @@ header.site-header {
   color: var(--marino); letter-spacing: -.3px;
 }
 .logo img { height: 40px; width: auto; }
+.nav-toggle { display: none; }
 
 nav.main-nav { background: var(--marino); }
 nav.main-nav ul { list-style: none; display: flex; flex-wrap: wrap; max-width: 1200px; margin: 0 auto; }
@@ -238,6 +237,7 @@ footer.site-footer .social {
   grid-template-columns: minmax(0, 1fr) 340px;
   gap: 28px; align-items: start;
 }
+.entradas-layout > main { min-width: 0; }
 
 /* ── Partido Cards ────────────────────────────────────────────── */
 .partido-lista { display: flex; flex-direction: column; gap: 14px; }
@@ -303,6 +303,13 @@ footer.site-footer .social {
   overflow: hidden;
   margin-top: 10px;
 }
+.arena-map-scroll {
+  max-width: 100%;
+  overflow-x: auto;
+  overscroll-behavior-inline: contain;
+  -webkit-overflow-scrolling: touch;
+}
+.arena-scroll-hint { display: none; }
 
 /* ── Top Toolbar ──────────────────────────────────────────────── */
 .arena-top-toolbar {
@@ -1040,6 +1047,7 @@ footer.site-footer .social {
   background: var(--blanco); border-radius: 20px;
   padding: 28px; max-width: 440px; width: 100%;
   box-shadow: var(--sombra-xl); animation: slideUp .26s ease;
+  max-height: calc(100dvh - 40px); overflow-y: auto;
 }
 .modal-box h3 {
   font-family: 'Barlow Condensed', sans-serif;
@@ -1232,7 +1240,19 @@ footer.site-footer .social {
 /* ── Responsive ───────────────────────────────────────────────── */
 @media (max-width: 900px) {
   .entradas-layout { grid-template-columns: 1fr; }
-  .carrito-box { position: static; }
+  .carrito-box { position: static; scroll-margin-top: 90px; }
+  .arena-viewport { width: max-content; min-width: 100%; }
+  .arena-tribuna { width: max-content; max-width: none; }
+  .arena-sectores-header { max-width: none; }
+  .arena-middle-row { max-width: none; }
+  .arena-cancha-wrapper { width: auto; flex: 1; }
+  .arena-seat { width: 28px; height: 32px; font-size: 10px; }
+  .arena-seat-block { gap: 4px; }
+  .arena-seat-row { gap: 4px; }
+  .arena-row-label { width: 18px; font-size: 11px; }
+  .arena-scroll-hint { display: block; padding: 10px 16px 0; font-size: 12px; color: var(--gris); }
+  .arena-zoom-widget { display: none; }
+  .arena-viewport { transform: none !important; }
 }
 @media (max-width: 680px) {
   .hero { min-height: 180px; padding: 38px 0; }
@@ -1249,7 +1269,6 @@ footer.site-footer .social {
 @media (max-width: 480px) {
   .container { padding: 0 16px; }
   .hero h1 { font-size: 34px; }
-  .steps-indicator .step-label { display: none; }
 }
 
 /* ══════════════════════════════════════════════════════
@@ -1356,7 +1375,6 @@ footer.site-footer .social {
   align-items: center;
   gap: 10px;
   transition: background .18s, transform .18s, border-color .18s, box-shadow .18s;
-  cursor: pointer;
 }
 .deporte-tile:hover {
   background: #fff;
@@ -1369,5 +1387,62 @@ footer.site-footer .social {
 .deporte-icon {
   font-size: 20px;
   line-height: 1;
+}
+
+/* Navegación y compra en pantallas táctiles */
+@media (max-width: 768px) {
+  .header-top { padding: 10px 16px; gap: 8px; }
+  .logo { min-width: 0; gap: 8px; }
+  .logo img { width: 36px; height: 36px; flex-shrink: 0; }
+  .logo span { font-size: clamp(11px, 3.5vw, 15px); line-height: 1.2; }
+  .nav-toggle {
+    display: inline-flex; align-items: center; justify-content: center; gap: 5px;
+    min-width: 72px; min-height: 44px; padding: 6px 9px;
+    border: 1px solid var(--borde); border-radius: 8px;
+    color: var(--marino); font-size: 17px; font-weight: 700;
+  }
+  .nav-toggle span { font-size: 12px; }
+  nav.main-nav { display: none; }
+  .site-header.menu-open nav.main-nav { display: block; }
+  nav.main-nav ul { display: block; max-height: calc(100dvh - 90px); overflow-y: auto; }
+  nav.main-nav a { padding: 13px 20px; min-height: 44px; font-size: 14px; }
+  .steps-bar { position: static; }
+  .steps-indicator { justify-content: space-between; gap: 2px; }
+  .step { flex: 1; flex-direction: column; gap: 3px; font-size: 10px; text-align: center; }
+  .step-sep { display: none; }
+  .hero-badge { max-width: 100%; border-radius: 12px; line-height: 1.4; }
+  .btn { white-space: normal; text-align: center; }
+  .partido-right { align-items: flex-start; }
+  .partido-precio-desde { text-align: left; }
+  .partido-right .btn { min-height: 44px; }
+  .arena-top-toolbar, .arena-subbar, .arena-bottom-bar { padding: 14px 16px; }
+  .arena-toolbar-left { width: 100%; justify-content: space-between; }
+  .btn-buscar-juntos { width: 100%; min-height: 44px; justify-content: center; }
+  .arena-subbar { align-items: flex-start; gap: 8px; }
+  .arena-subbar-title { min-width: 0; line-height: 1.4; }
+  .btn-restablecer { min-height: 40px; flex-shrink: 0; }
+  .arena-cta-bar { padding: 16px; }
+  .arena-btn-comprar { width: 100%; min-height: 48px; }
+  .modal-box input { font-size: 16px; }
+  footer.site-footer .social { flex-wrap: wrap; }
+}
+
+@media (max-width: 480px) {
+  .arena-seat { width: 32px; height: 36px; font-size: 11px; }
+  .arena-filas-wrap { gap: 5px; }
+  .arena-seat-block, .arena-seat-row { gap: 5px; }
+  .arena-aisle { width: 16px; }
+  .arena-general-card { width: 88px; }
+  .gen-step-btn { width: 28px; height: 32px; }
+  .general-card-title { font-size: 11px; }
+  .general-card-sub, .general-card-hint { font-size: 10px; }
+  .arena-subbar { flex-direction: column; }
+  .btn-restablecer { align-self: flex-end; }
+  .noticias-grid { grid-template-columns: minmax(0, 1fr); }
+  .cta-entradas .btn { min-width: 0 !important; }
+  .ticket-actions, .modal-actions { flex-direction: column; }
+  .ticket-actions .btn, .modal-actions .btn { width: 100%; }
+  .ticket-info-row, .ticket-orden-row { flex-wrap: wrap; }
+  .ticket-info-value { overflow-wrap: anywhere; }
 }
 
