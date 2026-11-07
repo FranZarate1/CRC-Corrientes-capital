@@ -12,22 +12,22 @@ const MAPA_ESTADIO = {
   zonas: [
     {
       id: "platea-norte",
-      nombre: "Platea Norte",
+      nombre: "Lado del parque",
       posicion: "norte", // referencia para una futura UI de mapa gráfico
       secciones: [
-        { id: "pn-1", nombre: "Platea Norte - Sección 1" },
-        { id: "pn-2", nombre: "Platea Norte - Sección 2" },
-        { id: "pn-3", nombre: "Platea Norte - Sección 3" },
+        { id: "pn-1", nombre: "Lado del parque - Sección 1" },
+        { id: "pn-2", nombre: "Lado del parque - Sección 2" },
+        { id: "pn-3", nombre: "Lado del parque - Sección 3" },
       ],
     },
     {
       id: "platea-sur",
-      nombre: "Platea Sur",
+      nombre: "Lado del rio",
       posicion: "sur",
       secciones: [
-        { id: "ps-1", nombre: "Platea Sur - Sección 1" },
-        { id: "ps-2", nombre: "Platea Sur - Sección 2" },
-        { id: "ps-3", nombre: "Platea Sur - Sección 3" },
+        { id: "ps-1", nombre: "Lado del rio - Sección 1" },
+        { id: "ps-2", nombre: "Lado del rio - Sección 2" },
+        { id: "ps-3", nombre: "Lado del rio - Sección 3" },
       ],
     },
     {
